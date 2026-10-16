@@ -1,0 +1,30 @@
+{
+ "tool": "PHM runtime verifier batch rerun (public driver)",
+ "date": "2026-10-16 10:31:56",
+ "seed": 20261016,
+ "scenarios": 2000,
+ "grounded": {
+  "n": 1000,
+  "pass": 1000,
+  "false_intercept": 0,
+  "false_intercept_rate": 0.0
+ },
+ "hallucinated": {
+  "n": 1000,
+  "intercepted": 1000,
+  "miss": 0,
+  "detection_rate": 1.0
+ },
+ "numbers_checked_total": 7174,
+ "wall_s": 0.67,
+ "worst_ms": 0.0,
+ "sample_cases": [],
+ "honesty_notes": [
+  "场景为参数化合成回答, 模拟数值幻觉注入模式, 非真实LLM生产流量",
+  "校验逻辑为确定性数值溯源核对, 无可学习参数; 固定种子20261016可复现",
+  "驱动自纠记录: 首版场景含年份句\"2026年记录\", 校验层将其正确判定为未溯源数字(333例), 属接口约定行为而非误拦; 已修正场景后重跑",
+  "内部物理量字段值仅存在于进程内, 本工件不含任何内部参数值 (核心脱敏)",
+  "对齐训练侧防幻觉与本层(输出拦截)互补, 不替代模型对齐训练"
+ ],
+ "audit_sha256": "26b01aa0556d7a02"
+}
