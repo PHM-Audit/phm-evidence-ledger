@@ -51,3 +51,22 @@ MIT for the ledger content; underlying scripts remain closed.
 ---
 
 **PHM evidence chain** — aggregate ledger: [phm-evidence-ledger](https://github.com/PHM-Audit/phm-evidence-ledger) (5,000,086,001 units, four layers, open metrics + SHA-256 manifest) · method parent: [agent-action-verifier](https://github.com/PHM-Audit/agent-action-verifier) (AgentDojo-validated) · [PHM-Audit profile](https://github.com/PHM-Audit)
+
+
+## Rerun 2026-10-16 — hallucination suppression & agent-interception (fresh, local-deterministic)
+
+Three-line rerun executed 2026-10-16 (all local-deterministic, no LLM API in the loop; core engine
+closed-source per release discipline — only verdicts, counters and an open driver script are published):
+
+| Line | Scale | Result | Artifact |
+|---|---|---|---|
+| Agent action interception (7 rule families, synthetic adversarial flows) | 20,000 scenarios (14,000 attack + 6,000 legitimate) | intercept_rate = 1.0 (0 miss), false_intercept_rate = 0.0, worst 304 ms | `rerun_2026-10-16/action_audit_metrics.json` (audit_sha256 861c2c74c2d89741) |
+| Concurrent tool-call injection stress (openai-agents SDK 0.23.1 internal executor path) | serial + concurrent + high-risk group, n=30 each | veto_rate = 1.0, leak_rate = 0.0, state_ok_rate = 1.0 | `rerun_2026-10-16/oai_concurrency_stress_result.json` |
+| Numeric-hallucination suppression (runtime numeric-provenance checking) | 2,000 scenarios (1,000 grounded + 1,000 hallucinated) | detection_rate = 1.0 (0 miss), false_intercept_rate = 0.0, 7,174 numbers checked | `rerun_2026-10-16/hallucination_rerun_2000.json` (audit_sha256 26b01aa0556d7a02) |
+
+Honest notes: scenarios are parameterized synthetic flows (seed 20261016), not production LLM traffic;
+the driver (`rerun_2026-10-16/rerun_hallucination_2000.py`) calls the verifier interface only —
+interface field names are neutralized (metric_a..h) and the real schema is a closed-source asset.
+Driver self-correction is recorded in the artifact: v1 driver contained a year token ("2026年"), which
+the checker correctly rejected as ungrounded (333 cases) — that is interface-contract behavior, not a
+false positive; scenarios were fixed and rerun. Per-file SHA-256 in `SHA256SUMS_rerun.txt`.
